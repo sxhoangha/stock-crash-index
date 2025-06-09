@@ -32,7 +32,9 @@ export default function HomePage() {
       }}
     >
       {' '}
-      <Container maxWidth="xl">        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Container maxWidth="xl">
+        {' '}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {/* First row - Crash Score */}
           <Box>
             <CrashScoreComponent data={crashScore} macroIndicators={macroIndicators} />
