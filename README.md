@@ -1,13 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Stock Market Crash Index Dashboard
+
+A real-time dashboard that visualizes market health and calculates a "Crash Probability Score" based on various market and economic indicators.
+
+## Features
+
+- Real-time S&P 500 and VIX tracking
+- Crash Probability Score (1-10)
+- Macro indicators (CPI, Unemployment, Bond Yields)
+- Sector performance tracking
+- Responsive design
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
+- Node.js 18.x or later
+- npm 7.x or later
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file and add your API keys:
+   ```env
+   ALPHA_VANTAGE_API_KEY=your_api_key_here
+   FRED_API_KEY=your_api_key_here
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Technology Stack
+
+- **Framework**: Next.js 14 with App Router
+- **UI Library**: Material UI
+- **Charts**: Chart.js with react-chartjs-2
+- **State Management**: Zustand
+- **Data Fetching**: Axios
+- **API Sources**:
+  - Alpha Vantage (Market Data)
+  - FRED (Economic Indicators)
+
+## Crash Score Calculation
+
+The Crash Probability Score (1-10) is calculated based on multiple factors:
+
+- VIX levels
+  - VIX > 30: +3 points
+  - VIX > 20: +2 points
+- S&P 500 performance
+  - -5% over 7 days: +2 points
+  - -10% over 30 days: +2 points
+- Economic indicators
+  - High CPI (>4%): +1 point
+  - High Unemployment (>6%): +1 point
+  - High Bond Yields (>5%): +1 point
+
+Risk levels are categorized as:
+- 1-3: Low Risk
+- 4-6: Moderate Risk
+- 7-10: High Risk
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/YourFeature`
+3. Commit your changes: `git commit -m 'Add YourFeature'`
+4. Push to the branch: `git push origin feature/YourFeature`
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
 # or
 pnpm dev
 # or
