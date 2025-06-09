@@ -32,8 +32,6 @@ const statusColors = {
 };
 
 export const CrashScoreComponent: React.FC<CrashScoreProps> = ({ data, macroIndicators }) => {
-  const normalizedValue = (data.score / 10) * 100;
-
   const getIndicatorStatus = (
     indicator: string,
     value: number
@@ -68,100 +66,55 @@ export const CrashScoreComponent: React.FC<CrashScoreProps> = ({ data, macroIndi
         return 'caution';
     }
   };
+
+  const getLatestValue = (data: any[] | undefined, fallback: number): number => {
+    return data && data.length > 0 ? data[data.length - 1].value : fallback;
+  };
+
   const getIndicators = (): IndicatorStatus[] => {
-    if (!macroIndicators) {
-      console.log('No macroIndicators prop provided');
-      return [];
-    }
-
-    // Add fallback test data if the API data is empty
-    const testMacroIndicators = {
-      cpiData:
-        macroIndicators.cpiData.length > 0
-          ? macroIndicators.cpiData
-          : [{ date: '2024-12-01', value: 2.8 }],
-      bondYieldData:
-        macroIndicators.bondYieldData.length > 0
-          ? macroIndicators.bondYieldData
-          : [{ date: '2024-12-01', value: 4.2 }],
-      gdpData:
-        macroIndicators.gdpData.length > 0
-          ? macroIndicators.gdpData
-          : [{ date: '2024-12-01', value: 2.1 }],
-      consumerConfidenceData:
-        macroIndicators.consumerConfidenceData.length > 0
-          ? macroIndicators.consumerConfidenceData
-          : [{ date: '2024-12-01', value: 95.0 }],
-      unemploymentData:
-        macroIndicators.unemploymentData.length > 0
-          ? macroIndicators.unemploymentData
-          : [{ date: '2024-12-01', value: 4.2 }],
-    };
-
-    const indicators: IndicatorStatus[] = [];
-
-    // CPI (using latest value)
-    if (testMacroIndicators.cpiData.length > 0) {
-      const latestCPI = testMacroIndicators.cpiData[testMacroIndicators.cpiData.length - 1].value;
-      indicators.push({
+    // Use fallback values if macroIndicators is not available or data is empty
+    const indicators: IndicatorStatus[] = [
+      {
         name: 'CPI YoY',
-        value: latestCPI,
-        status: getIndicatorStatus('CPI YoY', latestCPI),
-      });
-    }
-
-    // 10Y Yield
-    if (testMacroIndicators.bondYieldData.length > 0) {
-      const latestYield =
-        testMacroIndicators.bondYieldData[testMacroIndicators.bondYieldData.length - 1].value;
-      indicators.push({
+        value: getLatestValue(macroIndicators?.cpiData, 2.8),
+        status: getIndicatorStatus('CPI YoY', getLatestValue(macroIndicators?.cpiData, 2.8)),
+      },
+      {
         name: '10Y Yield',
-        value: latestYield,
-        status: getIndicatorStatus('10Y Yield', latestYield),
-      });
-    }
-
-    // GDP Growth
-    if (testMacroIndicators.gdpData.length > 0) {
-      const latestGDP = testMacroIndicators.gdpData[testMacroIndicators.gdpData.length - 1].value;
-      indicators.push({
+        value: getLatestValue(macroIndicators?.bondYieldData, 4.2),
+        status: getIndicatorStatus(
+          '10Y Yield',
+          getLatestValue(macroIndicators?.bondYieldData, 4.2)
+        ),
+      },
+      {
         name: 'GDP Growth',
-        value: latestGDP,
-        status: getIndicatorStatus('GDP Growth', latestGDP),
-      });
-    }
-
-    // Consumer Confidence
-    if (testMacroIndicators.consumerConfidenceData.length > 0) {
-      const latestConfidence =
-        testMacroIndicators.consumerConfidenceData[
-          testMacroIndicators.consumerConfidenceData.length - 1
-        ].value;
-      indicators.push({
+        value: getLatestValue(macroIndicators?.gdpData, 2.1),
+        status: getIndicatorStatus('GDP Growth', getLatestValue(macroIndicators?.gdpData, 2.1)),
+      },
+      {
         name: 'Consumer Confidence',
-        value: latestConfidence,
-        status: getIndicatorStatus('Consumer Confidence', latestConfidence),
-      });
-    }
-
-    // Unemployment
-    if (testMacroIndicators.unemploymentData.length > 0) {
-      const latestUnemployment =
-        testMacroIndicators.unemploymentData[testMacroIndicators.unemploymentData.length - 1].value;
-      indicators.push({
+        value: getLatestValue(macroIndicators?.consumerConfidenceData, 95.0),
+        status: getIndicatorStatus(
+          'Consumer Confidence',
+          getLatestValue(macroIndicators?.consumerConfidenceData, 95.0)
+        ),
+      },
+      {
         name: 'Unemployment',
-        value: latestUnemployment,
-        status: getIndicatorStatus('Unemployment', latestUnemployment),
-      });
-    }
+        value: getLatestValue(macroIndicators?.unemploymentData, 4.2),
+        status: getIndicatorStatus(
+          'Unemployment',
+          getLatestValue(macroIndicators?.unemploymentData, 4.2)
+        ),
+      },
+    ];
 
     return indicators;
   };
   const indicators = getIndicators();
-  console.log('MacroIndicators prop:', macroIndicators);
-  console.log('Indicators:', indicators);
-  console.log('MacroIndicators CPI length:', macroIndicators?.cpiData?.length);
-  console.log('MacroIndicators Bond yield length:', macroIndicators?.bondYieldData?.length);
+  const normalizedValue = (data.score / 10) * 100;
+
   return (
     <Card>
       <CardContent>
@@ -206,9 +159,76 @@ export const CrashScoreComponent: React.FC<CrashScoreProps> = ({ data, macroIndi
                   {indicator.value.toFixed(1)}%
                 </Typography>
               </Box>
-            ))}
+            ))}{' '}
           </Stack>
         </Box>
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'inline-flex',
+            marginBottom: 2,
+          }}
+        >
+          <CircularProgress
+            variant="determinate"
+            value={normalizedValue}
+            size={120}
+            thickness={4}
+            sx={{
+              color:
+                statusColors[
+                  normalizedValue <= 33 ? 'healthy' : normalizedValue <= 66 ? 'caution' : 'warning'
+                ],
+              circle: {
+                strokeLinecap: 'round',
+              },
+            }}
+          />
+          <Box
+            sx={{
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography
+              variant="h4"
+              component="div"
+              color={
+                statusColors[
+                  normalizedValue <= 33 ? 'healthy' : normalizedValue <= 66 ? 'caution' : 'warning'
+                ]
+              }
+            >
+              {data.score}
+            </Typography>
+          </Box>
+        </Box>
+        {data.factors.length > 0 && (
+          <>
+            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+              Risk Factors
+            </Typography>
+            <List dense>
+              {data.factors.map((factor, index) => (
+                <ListItem key={index}>
+                  <ListItemText
+                    primary={factor}
+                    primaryTypographyProps={{
+                      variant: 'body2',
+                      color: 'text.secondary',
+                    }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </>
+        )}
       </CardContent>
     </Card>
   );
