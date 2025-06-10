@@ -66,7 +66,6 @@ export const CrashScoreComponent: React.FC<CrashScoreProps> = ({ data, macroIndi
         return 'caution';
     }
   };
-
   const getLatestValue = (data: any[] | undefined, fallback: number): number => {
     return data && data.length > 0 ? data[data.length - 1].value : fallback;
   };

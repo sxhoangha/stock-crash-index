@@ -15,6 +15,8 @@ export interface MacroIndicators {
   bondYieldData: MarketData[]; // Array of 10-year Treasury yield values over time
   gdpData: MarketData[]; // Array of GDP growth rate values over time
   consumerConfidenceData: MarketData[]; // Array of Consumer Confidence Index values over time
+  totalDebtData: MarketData[]; // Array of Federal Debt: Total Public Debt values over time
+  debtToGdpData: MarketData[]; // Array of Federal Debt as % of GDP values over time
 }
 
 export interface CrashScore {

@@ -8,6 +8,7 @@ import { CPIChart } from './CPIChart';
 import { UnemploymentChart } from './UnemploymentChart';
 import { GDPChart } from './GDPChart';
 import { ConsumerConfidenceChart } from './ConsumerConfidenceChart';
+import { NationalDebtChart } from './NationalDebtChart';
 
 interface MacroIndicatorsProps {
   data: MacroIndicators;
@@ -48,13 +49,19 @@ export const MacroIndicatorsComponent: React.FC<MacroIndicatorsProps> = ({ data 
         {/* Second row (GDP and Consumer Confidence) */}
         <Box>
           <GDPChart data={data?.gdpData ?? []} />
-        </Box>
+        </Box>{' '}
         <Box>
           <ConsumerConfidenceChart data={data?.consumerConfidenceData ?? []} />
         </Box>
-        {/* Third row (moved from second row) */}
+        {/* Third row */}
         <Box>
           <UnemploymentChart data={data?.unemploymentData ?? []} />
+        </Box>
+        <Box>
+          <NationalDebtChart
+            totalDebtData={data?.totalDebtData ?? []}
+            debtToGdpData={data?.debtToGdpData ?? []}
+          />
         </Box>
       </Box>
     </Box>

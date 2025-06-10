@@ -86,6 +86,11 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
       y: {
         type: 'linear' as const,
         position: 'left' as const,
+        title: {
+          display: true,
+          text: 'CPI (YoY %)',
+          color: '#ff6b6b',
+        },
         grid: {
           color: '#f0f0f0',
         },
@@ -93,11 +98,17 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
           callback: function (value: string | number): string {
             return `${Number(value).toFixed(1)}%`;
           },
+          color: '#ff6b6b',
         },
       },
       pce: {
         type: 'linear' as const,
         position: 'right' as const,
+        title: {
+          display: true,
+          text: 'PCE Index (YoY %)',
+          color: '#4caf50',
+        },
         grid: {
           drawOnChartArea: false,
         },
@@ -105,6 +116,7 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
           callback: function (value: string | number): string {
             return `${Number(value).toFixed(1)}%`;
           },
+          color: '#4caf50',
         },
       },
     },

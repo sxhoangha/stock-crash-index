@@ -53,9 +53,7 @@ export async function GET() {
       today: todayStr,
       thirteenMonthsAgo: thirteenMonthsAgoStr,
       twoYearsAgo: twoYearsAgoStr,
-    });
-
-    // Add individual error handling for each request
+    }); // Add individual error handling for each request
     try {
       const [
         cpiResponse,
@@ -64,6 +62,8 @@ export async function GET() {
         bondYieldResponse,
         gdpResponse,
         consumerConfidenceResponse,
+        totalDebtResponse,
+        debtToGdpResponse,
       ] = await Promise.all([
         axios
           .get(
@@ -119,6 +119,25 @@ export async function GET() {
             );
             throw error;
           }),
+        axios
+          .get(
+            `${BASE_URL}?series_id=GFDEBTN&api_key=${FRED_API_KEY}&file_type=json&sort_order=desc&observation_end=${todayStr}&observation_start=${twoYearsAgoStr}&frequency=q`
+          )
+          .catch(error => {
+            console.error('Error fetching total debt data:', error.response?.data || error.message);
+            throw error;
+          }),
+        axios
+          .get(
+            `${BASE_URL}?series_id=GFDEGDQ188S&api_key=${FRED_API_KEY}&file_type=json&sort_order=desc&observation_end=${todayStr}&observation_start=${twoYearsAgoStr}&frequency=q`
+          )
+          .catch(error => {
+            console.error(
+              'Error fetching debt-to-GDP data:',
+              error.response?.data || error.message
+            );
+            throw error;
+          }),
       ]);
 
       console.log('Data points received:', {
@@ -155,8 +174,21 @@ export async function GET() {
           value: parseFloat(obs.value),
         }))
         .reverse();
-
       const consumerConfidenceData = (consumerConfidenceResponse.data?.observations || [])
+        .map((obs: any) => ({
+          date: obs.date,
+          value: parseFloat(obs.value),
+        }))
+        .reverse();
+
+      const totalDebtData = (totalDebtResponse.data?.observations || [])
+        .map((obs: any) => ({
+          date: obs.date,
+          value: parseFloat(obs.value),
+        }))
+        .reverse();
+
+      const debtToGdpData = (debtToGdpResponse.data?.observations || [])
         .map((obs: any) => ({
           date: obs.date,
           value: parseFloat(obs.value),
@@ -170,6 +202,8 @@ export async function GET() {
         bondYieldData: bondYieldData || [],
         gdpData: gdpData || [],
         consumerConfidenceData: consumerConfidenceData || [],
+        totalDebtData: totalDebtData || [],
+        debtToGdpData: debtToGdpData || [],
       };
 
       return NextResponse.json(macroIndicators);

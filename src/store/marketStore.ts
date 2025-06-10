@@ -21,6 +21,8 @@ export const useMarketStore = create<MarketState>((set, get) => ({
     bondYieldData: [],
     gdpData: [],
     consumerConfidenceData: [],
+    totalDebtData: [],
+    debtToGdpData: [],
   },
   crashScore: {
     score: 0,
