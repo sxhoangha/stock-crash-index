@@ -84,6 +84,9 @@ export const UnemploymentChart: React.FC<UnemploymentChartProps> = ({ data }) =>
       <CardContent>
         <Typography variant="h6" gutterBottom>
           Unemployment Rate
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Labor market employment indicator
           {hasData && (
             <Typography component="span" variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
               (Current: {formatNumber(latestValue)}%)

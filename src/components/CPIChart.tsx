@@ -151,8 +151,12 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
   return (
     <Card>
       <CardContent>
+        {' '}
         <Typography variant="h6" gutterBottom>
           Price Indices (Year-over-Year Change)
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Inflation metrics
           {hasCPIData && hasInflationData && (
             <Typography component="span" variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
               (CPI: {formatNumber(latestCPI)}% | PCE: {formatNumber(latestInflation)}%)

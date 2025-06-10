@@ -83,6 +83,9 @@ export const BondYieldChart: React.FC<BondYieldChartProps> = ({ data }) => {
       <CardContent>
         <Typography variant="h6" gutterBottom>
           10-Year Treasury Yield
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          U.S. government bond yield benchmark
           {hasData && (
             <Typography component="span" variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
               (Current: {formatNumber(latestValue)}%)

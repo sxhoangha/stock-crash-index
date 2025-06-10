@@ -83,6 +83,9 @@ export const GDPChart: React.FC<GDPChartProps> = ({ data }) => {
       <CardContent>
         <Typography variant="h6" gutterBottom>
           GDP Growth Rate
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Quarterly economic growth rate
           {hasData && (
             <Typography component="span" variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
               (Current: {formatNumber(latestValue)}%)
