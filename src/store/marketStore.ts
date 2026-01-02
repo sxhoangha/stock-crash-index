@@ -90,7 +90,7 @@ export const useMarketStore = create<MarketState>((set, get) => ({
       bondYield: getLatest(macroIndicators.bondYieldData, 4.0),
       yieldCurve: getLatest(macroIndicators.yieldCurveData, 0.5),
       joblessClaims: getLatest(macroIndicators.joblessClaimsData, 220000),
-      shillerPE: macroIndicators.currentShillerPE,
+      shillerPE: macroIndicators.currentShillerPE ?? undefined,
       fedFundsRate: getLatest(macroIndicators.fedFundsRateData, 4.5),
       creditSpread: getLatest(macroIndicators.creditSpreadData, 350),
     });
