@@ -9,6 +9,11 @@ import { UnemploymentChart } from './UnemploymentChart';
 import { GDPChart } from './GDPChart';
 import { ConsumerConfidenceChart } from './ConsumerConfidenceChart';
 import { NationalDebtChart } from './NationalDebtChart';
+import { YieldCurveChart } from './YieldCurveChart';
+import { JoblessClaimsChart } from './JoblessClaimsChart';
+
+import { FedFundsRateChart } from './FedFundsRateChart';
+import { CreditSpreadChart } from './CreditSpreadChart';
 
 interface MacroIndicatorsProps {
   data: MacroIndicators;
@@ -62,6 +67,19 @@ export const MacroIndicatorsComponent: React.FC<MacroIndicatorsProps> = ({ data 
             totalDebtData={data?.totalDebtData ?? []}
             debtToGdpData={data?.debtToGdpData ?? []}
           />
+        </Box>
+        {/* New indicators */}
+        <Box>
+          <YieldCurveChart data={data?.yieldCurveData ?? []} />
+        </Box>
+        <Box>
+          <JoblessClaimsChart data={data?.joblessClaimsData ?? []} />
+        </Box>
+        <Box>
+          <FedFundsRateChart data={data?.fedFundsRateData ?? []} />
+        </Box>
+        <Box>
+          <CreditSpreadChart data={data?.creditSpreadData ?? []} />
         </Box>
       </Box>
     </Box>

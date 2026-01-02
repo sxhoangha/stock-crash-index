@@ -1,0 +1,31 @@
+{
+  "lastUpdated": "2025-12-31",
+  "source": "Manual update from multpl.com or Robert Shiller's Yale data",
+  "note": "This file should be updated monthly with the latest Shiller CAPE ratio",
+  "data": [
+    { "date": "2024-01-01", "value": "32.97" },
+    { "date": "2024-02-01", "value": "34.16" },
+    { "date": "2024-03-01", "value": "34.33" },
+    { "date": "2024-04-01", "value": "32.64" },
+    { "date": "2024-05-01", "value": "34.18" },
+    { "date": "2024-06-01", "value": "35.63" },
+    { "date": "2024-07-01", "value": "35.43" },
+    { "date": "2024-08-01", "value": "34.53" },
+    { "date": "2024-09-01", "value": "35.36" },
+    { "date": "2024-10-01", "value": "36.24" },
+    { "date": "2024-11-01", "value": "38.29" },
+    { "date": "2024-12-01", "value": "37.59" },
+    { "date": "2025-01-01", "value": "37.45" },
+    { "date": "2025-02-01", "value": "36.72" },
+    { "date": "2025-03-01", "value": "33.97" },
+    { "date": "2025-04-01", "value": "32.48" },
+    { "date": "2025-05-01", "value": "33.81" },
+    { "date": "2025-06-01", "value": "35.12" },
+    { "date": "2025-07-01", "value": "35.88" },
+    { "date": "2025-08-01", "value": "34.52" },
+    { "date": "2025-09-01", "value": "35.41" },
+    { "date": "2025-10-01", "value": "36.67" },
+    { "date": "2025-11-01", "value": "38.14" },
+    { "date": "2025-12-01", "value": "40.23" }
+  ]
+}
