@@ -68,11 +68,9 @@ export default function HomePage() {
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {/* First row - Crash Index (NEW) */}
-          {crashIndex && (
-            <Box>
-              <CrashIndexDisplay data={crashIndex} />
-            </Box>
-          )}
+          <Box>
+            <CrashIndexDisplay data={crashIndex} />
+          </Box>
 
           {/* Second row - Individual Indicator Status */}
           <Box>

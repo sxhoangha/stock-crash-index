@@ -63,13 +63,43 @@ export const useMarketStore = create<MarketState>((set, get) => ({
     const state = get();
     const { sp500Data, vixData, macroIndicators } = state;
 
-    // Helper function to get latest value safely
-    const getLatest = (data: MarketData[] | undefined, fallback: number): number => {
-      return data && data.length > 0 ? data[data.length - 1].value : fallback;
+    // Helper function to get latest value - returns null if no data
+    const getLatest = (data: MarketData[] | undefined): number | null => {
+      return data && data.length > 0 ? data[data.length - 1].value : null;
     };
 
+    // Check if we have all required data before calculating
+    // Don't use fallback values - wait for real data
+    const vix = getLatest(vixData);
+    const sp500Latest = getLatest(sp500Data);
+    const cpi = getLatest(macroIndicators.cpiData);
+    const unemployment = getLatest(macroIndicators.unemploymentData);
+    const gdpGrowth = getLatest(macroIndicators.gdpData);
+    const consumerConfidence = getLatest(macroIndicators.consumerConfidenceData);
+    const bondYield = getLatest(macroIndicators.bondYieldData);
+    const yieldCurve = getLatest(macroIndicators.yieldCurveData);
+    const joblessClaims = getLatest(macroIndicators.joblessClaimsData);
+    const fedFundsRate = getLatest(macroIndicators.fedFundsRateData);
+    const creditSpread = getLatest(macroIndicators.creditSpreadData);
+
+    // If any critical data is missing, don't calculate - keep showing spinner
+    if (
+      vix === null ||
+      sp500Latest === null ||
+      cpi === null ||
+      unemployment === null ||
+      gdpGrowth === null ||
+      consumerConfidence === null ||
+      bondYield === null ||
+      yieldCurve === null ||
+      joblessClaims === null ||
+      fedFundsRate === null ||
+      creditSpread === null
+    ) {
+      return;
+    }
+
     // Calculate S&P 500 changes
-    const sp500Latest = getLatest(sp500Data, 0);
     const sp500_7daysAgo =
       sp500Data && sp500Data.length >= 7 ? sp500Data[sp500Data.length - 7].value : sp500Latest;
     const sp500_30daysAgo =
@@ -78,21 +108,21 @@ export const useMarketStore = create<MarketState>((set, get) => ({
     const sp500Change7d = calculatePercentageChange(sp500_7daysAgo, sp500Latest);
     const sp500Change30d = calculatePercentageChange(sp500_30daysAgo, sp500Latest);
 
-    // Calculate crash index
+    // Calculate crash index with real data only
     const crashIndex = calculateCrashIndex({
-      vix: getLatest(vixData, 15),
+      vix,
       sp500Change7d,
       sp500Change30d,
-      cpi: getLatest(macroIndicators.cpiData, 2.5),
-      unemployment: getLatest(macroIndicators.unemploymentData, 4.0),
-      gdpGrowth: getLatest(macroIndicators.gdpData, 2.0),
-      consumerConfidence: getLatest(macroIndicators.consumerConfidenceData, 95),
-      bondYield: getLatest(macroIndicators.bondYieldData, 4.0),
-      yieldCurve: getLatest(macroIndicators.yieldCurveData, 0.5),
-      joblessClaims: getLatest(macroIndicators.joblessClaimsData, 220000),
+      cpi,
+      unemployment,
+      gdpGrowth,
+      consumerConfidence,
+      bondYield,
+      yieldCurve,
+      joblessClaims,
       shillerPE: macroIndicators.currentShillerPE ?? undefined,
-      fedFundsRate: getLatest(macroIndicators.fedFundsRateData, 4.5),
-      creditSpread: getLatest(macroIndicators.creditSpreadData, 350),
+      fedFundsRate,
+      creditSpread,
     });
 
     set({ crashIndex });

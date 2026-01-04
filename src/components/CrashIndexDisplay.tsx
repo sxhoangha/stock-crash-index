@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   Chip,
+  CircularProgress,
 } from '@mui/material';
 import { CrashIndex, crashIndexColors } from '@/lib/types';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -18,10 +19,26 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 interface CrashIndexDisplayProps {
-  data: CrashIndex;
+  data: CrashIndex | null;
 }
 
 export const CrashIndexDisplay: React.FC<CrashIndexDisplayProps> = ({ data }) => {
+  // Show loading state if no data
+  if (!data) {
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
+            Market Crash Index
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+            <CircularProgress size={60} />
+          </Box>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const riskColor = crashIndexColors[data.risk];
 
   const getRiskIcon = () => {
