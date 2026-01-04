@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import { Line } from 'react-chartjs-2';
+import { useResponsiveChart } from '@/hooks/useResponsiveChart';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -36,7 +37,9 @@ export const MarketIndexes: React.FC<MarketIndexesProps> = ({
   data,
   title,
   color,
-}) => {  const hasData = Array.isArray(data) && data.length > 0;
+}) => {
+  const { getResponsiveOptions } = useResponsiveChart();
+  const hasData = Array.isArray(data) && data.length > 0;
 
   const chartData = {
     labels: hasData ? data.map((d) => {
@@ -55,8 +58,7 @@ export const MarketIndexes: React.FC<MarketIndexesProps> = ({
     ],
   };
 
-  const options = {
-    responsive: true,
+  const baseOptions = {
     plugins: {
       legend: {
         display: false,
@@ -78,6 +80,8 @@ export const MarketIndexes: React.FC<MarketIndexesProps> = ({
       },
     },
   };
+
+  const options = getResponsiveOptions(baseOptions);
 
   const latestValue = hasData ? data[data.length - 1]?.value : undefined;
   const previousValue = hasData ? data[data.length - 2]?.value : undefined;
@@ -107,9 +111,9 @@ export const MarketIndexes: React.FC<MarketIndexesProps> = ({
               {percentageChange >= 0 ? '+' : ''}
               {formatNumber(percentageChange)}%
             </Typography>
-            <div style={{ height: 200 }}>
+            <Box sx={{ height: { xs: '250px', md: '300px' }, width: '100%' }}>
               <Line data={chartData} options={options} />
-            </div>
+            </Box>
           </>
         ) : (
           <Typography color="text.secondary">Loading data...</Typography>

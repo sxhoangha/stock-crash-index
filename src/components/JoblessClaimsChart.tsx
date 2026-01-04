@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, Typography, CircularProgress } from '@mui/material';
+import { Card, CardContent, Typography, CircularProgress, Box } from '@mui/material';
 import { Line } from 'react-chartjs-2';
+import { useResponsiveChart } from '@/hooks/useResponsiveChart';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,6 +23,7 @@ interface JoblessClaimsChartProps {
 }
 
 export const JoblessClaimsChart: React.FC<JoblessClaimsChartProps> = ({ data }) => {
+  const { getResponsiveOptions } = useResponsiveChart();
   const hasData = Array.isArray(data) && data.length > 0;
   const latestValue = hasData ? data[data.length - 1]?.value : undefined;
 
@@ -44,8 +46,7 @@ export const JoblessClaimsChart: React.FC<JoblessClaimsChartProps> = ({ data }) 
     ],
   };
 
-  const options = {
-    responsive: true,
+  const baseOptions = {
     plugins: {
       legend: {
         display: true,
@@ -75,8 +76,9 @@ export const JoblessClaimsChart: React.FC<JoblessClaimsChartProps> = ({ data }) 
         },
       },
     },
-    maintainAspectRatio: false,
   };
+
+  const options = getResponsiveOptions(baseOptions);
 
   return (
     <Card>
@@ -92,9 +94,9 @@ export const JoblessClaimsChart: React.FC<JoblessClaimsChartProps> = ({ data }) 
         {!hasData ? (
           <CircularProgress />
         ) : (
-          <div style={{ position: 'relative', height: '300px' }}>
+          <Box sx={{ height: { xs: '250px', md: '300px' }, width: '100%' }}>
             <Line data={chartData} options={options} />
-          </div>
+          </Box>
         )}
       </CardContent>
     </Card>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { MarketData } from '@/lib/types';
 import { formatNumber } from '@/lib/utils';
+import { useResponsiveChart } from '@/hooks/useResponsiveChart';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -23,6 +24,7 @@ interface BondYieldChartProps {
 }
 
 export const BondYieldChart: React.FC<BondYieldChartProps> = ({ data }) => {
+  const { getResponsiveOptions } = useResponsiveChart();
   const hasData = Array.isArray(data) && data.length > 0;
   const latestValue = hasData ? data[data.length - 1]?.value : undefined;
 
@@ -45,8 +47,7 @@ export const BondYieldChart: React.FC<BondYieldChartProps> = ({ data }) => {
     ],
   };
 
-  const options = {
-    responsive: true,
+  const baseOptions = {
     plugins: {
       legend: {
         display: true,
@@ -75,8 +76,9 @@ export const BondYieldChart: React.FC<BondYieldChartProps> = ({ data }) => {
         },
       },
     },
-    maintainAspectRatio: false,
   };
+
+  const options = getResponsiveOptions(baseOptions);
 
   return (
     <Card>
@@ -93,9 +95,9 @@ export const BondYieldChart: React.FC<BondYieldChartProps> = ({ data }) => {
           )}
         </Typography>
         {hasData ? (
-          <div style={{ height: '300px', width: '100%' }}>
+          <Box sx={{ height: { xs: '250px', md: '300px' }, width: '100%' }}>
             <Line data={chartData} options={options} />
-          </div>
+          </Box>
         ) : (
           <Typography color="text.secondary">Loading bond yield data...</Typography>
         )}

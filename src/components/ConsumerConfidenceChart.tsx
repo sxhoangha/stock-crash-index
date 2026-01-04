@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import { Line } from 'react-chartjs-2';
+import { useResponsiveChart } from '@/hooks/useResponsiveChart';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,6 +24,7 @@ interface ConsumerConfidenceChartProps {
 }
 
 export const ConsumerConfidenceChart: React.FC<ConsumerConfidenceChartProps> = ({ data }) => {
+  const { getResponsiveOptions } = useResponsiveChart();
   const hasData = Array.isArray(data) && data.length > 0;
   const latestValue = hasData ? data[data.length - 1]?.value : undefined;
 
@@ -45,8 +47,7 @@ export const ConsumerConfidenceChart: React.FC<ConsumerConfidenceChartProps> = (
     ],
   };
 
-  const options = {
-    responsive: true,
+  const baseOptions = {
     plugins: {
       legend: {
         display: true,
@@ -75,8 +76,9 @@ export const ConsumerConfidenceChart: React.FC<ConsumerConfidenceChartProps> = (
         },
       },
     },
-    maintainAspectRatio: false,
   };
+
+  const options = getResponsiveOptions(baseOptions);
 
   return (
     <Card>
@@ -88,9 +90,9 @@ export const ConsumerConfidenceChart: React.FC<ConsumerConfidenceChartProps> = (
           {latestValue !== undefined ? formatNumber(latestValue, 1) : 'Loading...'}
         </Typography>
         {hasData ? (
-          <div style={{ position: 'relative', height: '300px' }}>
+          <Box sx={{ height: { xs: '250px', md: '300px' }, width: '100%' }}>
             <Line data={chartData} options={options} />
-          </div>
+          </Box>
         ) : (
           <Typography color="text.secondary">Loading consumer confidence data...</Typography>
         )}

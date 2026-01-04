@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { MarketData } from '@/lib/types';
 import { formatNumber } from '@/lib/utils';
+import { useResponsiveChart } from '@/hooks/useResponsiveChart';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -24,6 +25,7 @@ interface CPIChartProps {
 }
 
 export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
+  const { getMultiAxisOptions } = useResponsiveChart();
   const hasCPIData = Array.isArray(data) && data.length > 0;
   const hasInflationData = Array.isArray(inflationData) && inflationData.length > 0;
   const latestCPI = hasCPIData ? data[data.length - 1]?.value : undefined;
@@ -61,8 +63,7 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
     ],
   };
 
-  const options = {
-    responsive: true,
+  const baseOptions = {
     plugins: {
       legend: {
         display: true,
@@ -120,8 +121,9 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
         },
       },
     },
-    maintainAspectRatio: false,
   };
+
+  const options = getMultiAxisOptions(baseOptions, 'pce');
 
   const renderContent = () => {
     if (!Array.isArray(data) || !Array.isArray(inflationData)) {
@@ -142,9 +144,9 @@ export const CPIChart: React.FC<CPIChartProps> = ({ data, inflationData }) => {
     }
 
     return (
-      <div style={{ height: '300px', width: '100%' }}>
+      <Box sx={{ height: { xs: '250px', md: '300px' }, width: '100%' }}>
         <Line data={chartData} options={options} />
-      </div>
+      </Box>
     );
   };
 
