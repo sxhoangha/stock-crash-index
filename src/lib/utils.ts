@@ -220,13 +220,26 @@ export function calculateCrashIndex(indicators: {
     }
   }
 
-  // Jobless Claims (8 pts) - Real-time labor indicator
+  // Consumer Confidence (6 pts) - Consumer sentiment & spending predictor
+  // This is a leading indicator of consumption (70% of GDP)
+  if (indicators.consumerConfidence < 80) {
+    concurrent += 6;
+    factors.push(`Consumer confidence ${indicators.consumerConfidence.toFixed(1)} (very pessimistic)`);
+  } else if (indicators.consumerConfidence < 90) {
+    concurrent += 4;
+    factors.push(`Consumer confidence ${indicators.consumerConfidence.toFixed(1)} (pessimistic)`);
+  } else if (indicators.consumerConfidence < 95) {
+    concurrent += 2;
+    factors.push(`Consumer confidence ${indicators.consumerConfidence.toFixed(1)} (weak)`);
+  }
+
+  // Jobless Claims (5 pts) - Real-time labor indicator
   if (indicators.joblessClaims !== undefined) {
     if (indicators.joblessClaims > 400000) {
-      concurrent += 8;
+      concurrent += 5;
       factors.push(`Jobless claims ${(indicators.joblessClaims / 1000).toFixed(0)}K (severe)`);
     } else if (indicators.joblessClaims > 300000) {
-      concurrent += 4;
+      concurrent += 2.5;
       factors.push(`Jobless claims ${(indicators.joblessClaims / 1000).toFixed(0)}K (elevated)`);
     }
   }
@@ -272,15 +285,6 @@ export function calculateCrashIndex(indicators: {
   } else if (indicators.gdpGrowth < 1) {
     lagging += 2;
     factors.push(`GDP ${indicators.gdpGrowth.toFixed(1)}% (weak)`);
-  }
-
-  // Consumer Confidence (3 pts) - Sentiment
-  if (indicators.consumerConfidence < 85) {
-    lagging += 3;
-    factors.push(`Consumer confidence ${indicators.consumerConfidence.toFixed(1)} (pessimistic)`);
-  } else if (indicators.consumerConfidence < 95) {
-    lagging += 1.5;
-    factors.push(`Consumer confidence ${indicators.consumerConfidence.toFixed(1)} (weak)`);
   }
 
   // Calculate total score

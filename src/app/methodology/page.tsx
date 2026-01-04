@@ -144,7 +144,7 @@ export default function MethodologyPage() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <WarningAmberIcon sx={{ color: '#ff9800' }} />
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#ff9800' }}>
-                  Tier 2: Concurrent Indicators (35 points)
+                  Tier 2: Concurrent Indicators (38 points)
                 </Typography>
               </Box>
               <Typography variant="body2" color="text.secondary" paragraph>
@@ -167,13 +167,18 @@ export default function MethodologyPage() {
                       <TableCell>Real-time measure of market fear. Spikes during crashes and corrections.</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableCell>Consumer Confidence</TableCell>
+                      <TableCell align="right">6</TableCell>
+                      <TableCell>Leading indicator of consumer spending (70% of GDP). Predicts future economic activity.</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableCell>Fed Funds Rate</TableCell>
                       <TableCell align="right">10</TableCell>
                       <TableCell>Monetary policy stance. Aggressive tightening can trigger recessions.</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell>Jobless Claims</TableCell>
-                      <TableCell align="right">8</TableCell>
+                      <TableCell align="right">5</TableCell>
                       <TableCell>Weekly labor market health. Rapid increases signal deteriorating economy.</TableCell>
                     </TableRow>
                     <TableRow>
@@ -191,7 +196,7 @@ export default function MethodologyPage() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <ErrorOutlineIcon sx={{ color: '#9c27b0' }} />
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#9c27b0' }}>
-                  Tier 3: Lagging Indicators (25 points)
+                  Tier 3: Lagging Indicators (22 points)
                 </Typography>
               </Box>
               <Typography variant="body2" color="text.secondary" paragraph>
@@ -222,11 +227,6 @@ export default function MethodologyPage() {
                       <TableCell>GDP Growth</TableCell>
                       <TableCell align="right">4</TableCell>
                       <TableCell>Quarterly measure. Negative growth confirms recession (reported with delay).</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Consumer Confidence</TableCell>
-                      <TableCell align="right">3</TableCell>
-                      <TableCell>Reflects sentiment. Drops after bad news is already known.</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -546,9 +546,9 @@ export default function MethodologyPage() {
               Threshold Logic:
             </Typography>
             <Box component="ul" sx={{ mt: 1, mb: 2 }}>
-              <li><Typography variant="body2"><strong>Healthy:</strong> &lt; 250,000 (strong labor market)</Typography></li>
-              <li><Typography variant="body2"><strong>Caution:</strong> 250,000-350,000 (labor market softening)</Typography></li>
-              <li><Typography variant="body2"><strong>Warning:</strong> &gt; 350,000 (labor market stress, recession likely)</Typography></li>
+              <li><Typography variant="body2"><strong>Healthy:</strong> &lt; 300,000 (strong labor market)</Typography></li>
+              <li><Typography variant="body2"><strong>Caution:</strong> 300,000-400,000 (labor market softening)</Typography></li>
+              <li><Typography variant="body2"><strong>Warning:</strong> &gt; 400,000 (severe labor market stress, recession likely)</Typography></li>
             </Box>
 
             <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -795,9 +795,11 @@ export default function MethodologyPage() {
               Why it matters:
             </Typography>
             <Typography variant="body2" paragraph>
-              Consumer spending represents ~70% of U.S. GDP. When consumers are pessimistic, they cut spending
-              and increase saving, which slows economic growth. However, confidence is a lagging indicator
-              because it typically drops after bad news is already known (job losses, stock declines).
+              Consumer spending represents ~70% of U.S. GDP, making this one of the most important economic
+              indicators. Consumer confidence is a powerful predictor of future spending behavior. When consumers
+              are pessimistic about the future, they cut discretionary spending and increase saving, which directly
+              impacts corporate earnings and can trigger economic slowdowns. This indicator is weighted heavily
+              because consumer spending is the largest component of GDP.
             </Typography>
 
             <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -805,17 +807,20 @@ export default function MethodologyPage() {
             </Typography>
             <Typography variant="body2" paragraph>
               The Conference Board surveys ~3,000 households about current business/employment conditions and
-              6-month outlook. Responses are indexed and combined into a composite score. Confidence tends to
-              track stock market performance and unemployment trends.
+              their 6-month outlook for income and business conditions. The forward-looking component makes this
+              a leading indicator for consumption patterns. When confidence drops sharply, consumers delay major
+              purchases (homes, cars, appliances), reduce discretionary spending, and increase precautionary
+              saving, creating a self-reinforcing economic slowdown.
             </Typography>
 
             <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold' }}>
               Threshold Logic:
             </Typography>
             <Box component="ul" sx={{ mt: 1, mb: 2 }}>
-              <li><Typography variant="body2"><strong>Healthy:</strong> &gt; 100 (optimistic consumers)</Typography></li>
-              <li><Typography variant="body2"><strong>Caution:</strong> 85-100 (weakening sentiment)</Typography></li>
-              <li><Typography variant="body2"><strong>Warning:</strong> &lt; 85 (pessimistic, recession risk)</Typography></li>
+              <li><Typography variant="body2"><strong>Healthy:</strong> &gt; 95 (strong consumer sentiment)</Typography></li>
+              <li><Typography variant="body2"><strong>Caution:</strong> 90-95 (weakening sentiment)</Typography></li>
+              <li><Typography variant="body2"><strong>Warning:</strong> 80-90 (pessimistic consumers)</Typography></li>
+              <li><Typography variant="body2"><strong>Severe:</strong> &lt; 80 (very pessimistic, recession highly likely)</Typography></li>
             </Box>
 
             <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold' }}>
