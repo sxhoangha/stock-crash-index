@@ -85,21 +85,19 @@ export const UnemploymentChart: React.FC<UnemploymentChartProps> = ({ data }) =>
         <Typography variant="h6" gutterBottom>
           Unemployment Rate
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Labor market employment indicator
-          {hasData && (
-            <Typography component="span" variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
-              (Current: {formatNumber(latestValue)}%)
-            </Typography>
-          )}
+        <Typography variant="h4" sx={{ color: '#ff9800', mb: 2 }}>
+          {latestValue !== undefined ? `${formatNumber(latestValue)}%` : 'Loading...'}
         </Typography>
         {hasData ? (
-          <div style={{ height: '300px', width: '100%' }}>
+          <div style={{ position: 'relative', height: '300px' }}>
             <Line data={chartData} options={options} />
           </div>
         ) : (
           <Typography color="text.secondary">Loading unemployment data...</Typography>
         )}
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+          Labor market employment indicator
+        </Typography>
       </CardContent>
     </Card>
   );

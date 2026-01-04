@@ -84,21 +84,19 @@ export const ConsumerConfidenceChart: React.FC<ConsumerConfidenceChartProps> = (
         <Typography variant="h6" gutterBottom>
           Consumer Confidence Index
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Consumer economic sentiment indicator
-          {hasData && (
-            <Typography component="span" variant="subtitle1" color="text.secondary" sx={{ ml: 1 }}>
-              (Current: {formatNumber(latestValue)})
-            </Typography>
-          )}
+        <Typography variant="h4" sx={{ color: '#4caf50', mb: 2 }}>
+          {latestValue !== undefined ? formatNumber(latestValue, 1) : 'Loading...'}
         </Typography>
         {hasData ? (
-          <div style={{ height: '300px', width: '100%' }}>
+          <div style={{ position: 'relative', height: '300px' }}>
             <Line data={chartData} options={options} />
           </div>
         ) : (
           <Typography color="text.secondary">Loading consumer confidence data...</Typography>
         )}
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+          Consumer economic sentiment indicator
+        </Typography>
       </CardContent>
     </Card>
   );

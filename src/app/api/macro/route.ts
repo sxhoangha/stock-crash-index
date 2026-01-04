@@ -4,8 +4,28 @@ import axios from 'axios';
 const FRED_API_KEY = process.env.FRED_API_KEY || 'demo';
 const BASE_URL = 'https://api.stlouisfed.org/fred/series/observations';
 
+// Cache for Shiller PE value (prevents excessive scraping)
+// Note: In Vercel serverless functions, this cache persists within the same execution context
+// but may be reset between cold starts. This is acceptable since CAPE values update infrequently.
+let cachedShillerPE: { value: number | null; timestamp: number } = {
+  value: null,
+  timestamp: 0,
+};
+
 // Function to fetch current Shiller PE value for crash index calculation
 async function fetchCurrentShillerPE(): Promise<number | null> {
+  // Check cache first (24 hour TTL)
+  const now = Date.now();
+  const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+  if (cachedShillerPE.value !== null && now - cachedShillerPE.timestamp < CACHE_TTL) {
+    const ageHours = ((now - cachedShillerPE.timestamp) / (60 * 60 * 1000)).toFixed(1);
+    console.log(`✓ Using cached Shiller PE: ${cachedShillerPE.value} (age: ${ageHours}h)`);
+    return cachedShillerPE.value;
+  }
+
+  console.log('Cache miss or expired, fetching fresh Shiller PE value...');
+
   // Try Source 1: multpl.com scraping (most up-to-date public source)
   try {
     console.log('Fetching current Shiller PE from multpl.com...');
@@ -19,13 +39,17 @@ async function fetchCurrentShillerPE(): Promise<number | null> {
     });
 
     const html = response.data;
-    // Try multiple regex patterns to extract the current value
+
+    // Look for numerical values that could be the CAPE ratio (typically 20-50 range)
+    const potentialMatches = html.match(/\b([23]\d\.\d{1,2}|[4]\d\.\d{1,2}|50\.\d{1,2})\b/g);
+
+    // Try multiple regex patterns to extract the current value in context
     const patterns = [
+      /Current Shiller PE Ratio:\s*([\d.]+)/i,
+      /Shiller PE Ratio:\s*([\d.]+)/i,
       /<div[^>]*id=["']current["'][^>]*>([\d.]+)<\/div>/i,
       /<div[^>]*class=["'][^"']*current[^"']*["'][^>]*>([\d.]+)<\/div>/i,
-      /<strong[^>]*>([\d.]+)<\/strong>/i,
-      /Current Shiller PE Ratio[^:]*:\s*([\d.]+)/i,
-      /<title>[^<]*?([\d.]+)[^<]*?<\/title>/i,
+      />(\d+\.\d+)<\/(?:strong|span|div)/i,
     ];
 
     for (const pattern of patterns) {
@@ -33,10 +57,22 @@ async function fetchCurrentShillerPE(): Promise<number | null> {
       if (match && match[1]) {
         const value = parseFloat(match[1]);
         if (!isNaN(value) && value > 5 && value < 100) {
-          // Sanity check
           console.log(`✓ Current Shiller PE: ${value} (from multpl.com)`);
+          // Cache the value
+          cachedShillerPE = { value, timestamp: Date.now() };
           return value;
         }
+      }
+    }
+
+    // Fallback: Use the first potential CAPE value found (usually the current value)
+    if (potentialMatches && potentialMatches.length > 0) {
+      const value = parseFloat(potentialMatches[0]);
+      if (!isNaN(value) && value > 5 && value < 100) {
+        console.log(`✓ Current Shiller PE: ${value} (from multpl.com)`);
+        // Cache the value
+        cachedShillerPE = { value, timestamp: Date.now() };
+        return value;
       }
     }
   } catch (error) {
@@ -63,6 +99,8 @@ async function fetchCurrentShillerPE(): Promise<number | null> {
         if (!isNaN(value) && value > 0) {
           console.log(`✓ Current PE Ratio: ${value} (from Alpha Vantage - SPY)`);
           console.log('Note: Using forward PE ratio as proxy for Shiller CAPE');
+          // Cache the value
+          cachedShillerPE = { value, timestamp: Date.now() };
           return value;
         }
       } else {
@@ -91,6 +129,8 @@ async function fetchCurrentShillerPE(): Promise<number | null> {
       if (peRatio && !isNaN(parseFloat(peRatio))) {
         const value = parseFloat(peRatio);
         console.log(`✓ Current PE Ratio: ${value} (from Financial Modeling Prep)`);
+        // Cache the value
+        cachedShillerPE = { value, timestamp: Date.now() };
         return value;
       }
     }

@@ -90,7 +90,7 @@ export const CreditSpreadChart: React.FC<CreditSpreadChartProps> = ({ data }) =>
         {!hasData ? (
           <CircularProgress />
         ) : (
-          <div style={{ position: 'relative', height: '250px' }}>
+          <div style={{ position: 'relative', height: '300px' }}>
             <Line data={chartData} options={options} />
           </div>
         )}

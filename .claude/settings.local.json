@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run dev:*)",
-      "Bash(Get-Content \"C:\\\\Users\\\\hha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--projects-experiments-stock-crash-index\\\\tasks\\\\bd289c0.output\" -Tail 30)"
+      "Bash(Get-Content \"C:\\\\Users\\\\hha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--projects-experiments-stock-crash-index\\\\tasks\\\\bd289c0.output\" -Tail 30)",
+      "Bash(curl:*)"
     ]
   }
 }

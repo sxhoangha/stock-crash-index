@@ -11,7 +11,7 @@ import { ConsumerConfidenceChart } from './ConsumerConfidenceChart';
 import { NationalDebtChart } from './NationalDebtChart';
 import { YieldCurveChart } from './YieldCurveChart';
 import { JoblessClaimsChart } from './JoblessClaimsChart';
-
+import { ShillerPEChart } from './ShillerPEChart';
 import { FedFundsRateChart } from './FedFundsRateChart';
 import { CreditSpreadChart } from './CreditSpreadChart';
 
@@ -74,6 +74,9 @@ export const MacroIndicatorsComponent: React.FC<MacroIndicatorsProps> = ({ data 
         </Box>
         <Box>
           <JoblessClaimsChart data={data?.joblessClaimsData ?? []} />
+        </Box>
+        <Box>
+          <ShillerPEChart currentValue={data?.currentShillerPE} />
         </Box>
         <Box>
           <FedFundsRateChart data={data?.fedFundsRateData ?? []} />
